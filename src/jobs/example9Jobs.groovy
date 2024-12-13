@@ -7,38 +7,12 @@ folder(basePath) {
 
 job("$basePath/gradle-legacy-build") {
     scm {
-        cvsscm { // <-- NOTE: provided by testPlugins dependency in build.gradle
-            repositories {
-                cvsRepository {
-                    cvsRoot repo
-                    passwordRequired false
-                    password null
-                    compressionLevel(-1)
-                    repositoryBrowser {}
-                    repositoryItems {
-                        cvsRepositoryItem {
-                            modules {
-                                cvsModule {
-                                    remoteName 'sheehan/gradle-example'
-                                    localName '.'
-                                    projectsetFileName null
-                                }
-                            }
-                            location {
-                                headRepositoryLocation()
-                            }
-                        }
-                    }
-                }
+        git {
+            remote {
+                github repo
+                refspec '+refs/pull/*:refs/remotes/origin/pr/*'
             }
-            canUseUpdate true
-            pruneEmptyDirectories true
-            legacy false
-            skipChangeLog false
-            disableCvsQuiet false
-            cleanOnFailedUpdate false
-            forceCleanCopy false
-            checkoutCurrentTimestamp false
+            branch '${sha1}'
         }
     }
     triggers {
@@ -53,6 +27,7 @@ folder('images-folder') {
     displayName('Docker Images')
 
     properties {
+        /*
         folderLibraries { // <-- NOTE: provided by testPlugins dependency in build.gradle
             libraries {
                 libraryConfiguration {
@@ -62,5 +37,6 @@ folder('images-folder') {
                 }
             }
         }
+         */
     }
 }
